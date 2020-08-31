@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-// import Recipe from "./Recipe"
 
 class SearchForm extends Component {
   render () {

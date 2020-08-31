@@ -1,7 +1,8 @@
 import React from "react"
-import { Container, Row, Col, Card, Button } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.css';
 import SearchForm from "./SearchForm"
+import MealList from "./Meal"
+import Header from "./Navbar"
 
 class Recipe extends React.Component {
   constructor () {
@@ -44,39 +45,11 @@ class Recipe extends React.Component {
   render () {
     return (
       <div>
-        <h1>{this.state.title}</h1>
+        <Header />
         <hr />
-        <p>{this.state.searchQuery}</p>
-        <SearchForm 
-          inputSearch={this.state.searchQuery} 
-          onChange={(evt) => this.handleSearchQuery(evt)}
-          onSave={() => this.handleSave()}
+        <MealList 
+          meals={this.state.meals}
         />
-        {
-          this.state.recipes.map((recipe, i) => {
-            return <li key={i}>{recipe}</li>
-          })
-        }
-
-        <Container>
-          <Row>
-            {
-              this.state.meals.map((meal, i) => {
-                return (
-                  <Col key={i} className="p-2">
-                    <Card style={{ width: '10rem' }}>
-                      <Card.Img variant="top" src={meal.strMealThumb + '/preview'} />
-                      <Card.Body>
-                        <Card.Title>{meal.strMeal}</Card.Title>
-                        <Button variant="warning" >See Details</Button>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                )
-              })
-            }
-          </Row>
-        </Container>
       </div>
     )
   }
