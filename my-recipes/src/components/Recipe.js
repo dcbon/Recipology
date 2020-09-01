@@ -1,58 +1,51 @@
-import React from "react"
-import 'bootstrap/dist/css/bootstrap.css';
-import SearchForm from "./SearchForm"
+import React, { useState } from "react"
 import MealList from "./Meal"
 import Header from "./Navbar"
+import useFetcher from "../hooks/useFetcher"
 
-class Recipe extends React.Component {
-  constructor () {
-    super ()
-    this.state = {
-      title: "Recipology",
-      recipes: ["Ayam Bakar", "Nasi Goreng"],
-      searchQuery: "",
-      meals: []
-    }
+const Recipe = () => {
+  const [input, setInput] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const {data: meals, loading, error} = useFetcher (`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery || ""}`)
+
+  const onChange = (evt) => {
+    setInput(evt.target.value)
+  } 
+
+  const onSubmit = (evt) => {
+    evt.preventDefault()
+    setSearchQuery(input)
   }
 
-  handleSearchQuery(evt) { 
-    this.setState ({
-      searchQuery: evt.target.value
-    })
-  }
-
-  handleSave () {
-    this.setState({
-      recipes: this.state.recipes.concat(this.state.searchQuery),
-      searchQuery: ""
-    })
-  }
-
-  async componentDidMount () {
-    try {
-      const res = await fetch ("https://www.themealdb.com/api/json/v1/1/search.php?s=")
-      const data = await res.json()
-      if (!res.ok) {
-        throw Error(res.statusText);
-      }
-      else this.setState(data)
-    }
-    catch (err) {
-      console.log(err);
-    }
-  }
-
-  render () {
-    return (
-      <div>
-        <Header />
-        <hr />
-        <MealList 
-          meals={this.state.meals}
-        />
+  if(loading) return (
+    <div className="container justify-content-center mt-5">
+      <div className="row justify-content-center">
+        <div className="col">
+          <div className="spinner-border text-danger" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
       </div>
-    )
-  }
+      <h1 className="text-danger">Please Wait..</h1>
+    </div>
+  )
+
+  if(error) return <>Something went wrong, please comeback later</>
+  
+  return (
+    <div className="mt-4">
+      <Header
+        input={input}
+        onChange={onChange}
+        onSubmit={onSubmit}
+      /> 
+      <h1 className="py-5">Try Our New Recipe!</h1>
+      <MealList 
+        meals={meals}
+      />
+    </div>
+  )
+  
 }
 
 export default Recipe

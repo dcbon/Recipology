@@ -4,7 +4,7 @@ import Recipe from './components/Recipe'
 
 function App() {
   return (
-    <div className="App">
+    <div className="App container-sm">
       <Recipe />
     </div>
   );
