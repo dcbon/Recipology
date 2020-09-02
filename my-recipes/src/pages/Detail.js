@@ -1,12 +1,26 @@
 import React, {useState, useEffect} from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
+import { useSelector, useDispatch } from "react-redux"
 
 const Detail = () => {
+  const history = useHistory()
+  const dispatch = useDispatch()
   const { id } = useParams()
   const [data, setData] = useState()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   // const [ingredients, setIngredients] = useState([])
+  
+  const toHome = () => {
+    history.push(`/`)
+  }
+
+  const favorited = (meal) => {
+    dispatch({
+      type: "ADD_FAV",
+      meal: meal
+    })
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -79,8 +93,8 @@ const Detail = () => {
                 <div className="col-6 text-justify">
                   <p className="" style={{whiteSpace: 'pre-wrap'}}>{data.strInstructions}</p>
                   <div className="justify-content-between text-right mt-3">
-                    <div className="btn btn-outline-danger mr-2"><i className="far fa-heart"></i></div>
-                    <div className="btn btn-danger px-5">Back</div>
+                    <div className="btn btn-outline-danger mr-2" onClick={() => favorited(data)}><i className="far fa-heart"></i></div>
+                    <div className="btn btn-danger px-5" onClick={toHome}>Back</div>
                   </div>
                 </div>
               </div>

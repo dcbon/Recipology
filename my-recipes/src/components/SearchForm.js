@@ -4,6 +4,7 @@ import {
   FormControl, 
   Button 
 } from 'react-bootstrap'
+import store from "../store"
 
 const SearchForm = () => {
   const [input, setInput] = useState("")
@@ -16,6 +17,10 @@ const SearchForm = () => {
   const onSubmit = (evt) => {
     evt.preventDefault()
     setSearchQuery(input)
+    store.dispatch({
+      type: "SET_SEARCH",
+      
+    })
   }
 
   return (

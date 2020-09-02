@@ -30,7 +30,7 @@ const Home = () => {
           {{
             backgroundPosition: "center", 
             backgroundSize: "cover", 
-            backgroundImage: "url(https://imgur.com/qOxVBlU.jpg)", 
+            backgroundImage: "url(https://phototheque-enx.com/_data/i/upload/2019/08/30/20190830154206-c51bdd19-me.jpg)", 
             height: "300px"
           }} 
           className="py-5 my-5 text-dark"

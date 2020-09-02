@@ -5,13 +5,23 @@ import {
   Button 
 } from 'react-bootstrap'
 import { useHistory } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
 
 
 const Meal = ({meal}) => {
+  // const faves = useSelector( state => state.favorites)
   const history = useHistory()
+  const dispatch = useDispatch()
 
   const toDetail = (id) => {
     history.push(`/recipe/${id}`)
+  }
+
+  const favorited = (meal) => {
+    dispatch({
+      type: "ADD_FAV",
+      meal: meal
+    })
   }
 
   return (
@@ -22,7 +32,7 @@ const Meal = ({meal}) => {
           <Card.Title>{meal.strMeal}</Card.Title>
           <div className="justify-content-between">
             <Button variant="danger" size="sm" className="mr-2" onClick={() => toDetail(meal.idMeal)}>See Details</Button>
-            <Button variant="outline-danger" size="sm"><i className="far fa-heart"></i></Button>
+            <Button variant="outline-danger" size="sm" onClick={() => favorited(meal)}><i className="far fa-heart"></i></Button>
           </div>
         </Card.Body>
       </Card>
