@@ -1,14 +1,12 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { useParams, useHistory } from 'react-router-dom'
+import useFetcher from "../hooks/useFetcher"
 import { useSelector, useDispatch } from "react-redux"
 
 const Detail = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { id } = useParams()
-  const [data, setData] = useState()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
   // const [ingredients, setIngredients] = useState([])
   
   const toHome = () => {
@@ -22,23 +20,7 @@ const Detail = () => {
     })
   }
 
-  useEffect(() => {
-    setLoading(true)
-    const fetchDetail = async () => {
-      try {
-        const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
-        const data = await res.json()
-        setData(data.meals)
-      }
-      catch (err) {
-        setError (err)
-      }
-      finally {
-        setLoading(false)
-      }
-    }
-    fetchDetail ()
-  }, [id])
+  const {data, loading, error} = useFetcher (`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
 
   // const getIngredients = () => {
   //   let newData = JSON.stringify(data)
