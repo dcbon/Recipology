@@ -1,40 +1,33 @@
 import React from "react"
-import { Container, Row, Col, Card, Button } from 'react-bootstrap'
+import { 
+  Col, 
+  Card, 
+  Button 
+} from 'react-bootstrap'
+import { useHistory } from "react-router-dom"
 
 
-const MealList = ({meals}) => {
-  if(!meals) return (
-    <div className="container justify-content-center mb-5">
-      <div className="row justify-content-center">
-        <div className="col">
-          <img src="https://image.freepik.com/free-vector/error-404-concept-illustration_114360-1811.jpg" alt="not found" />
-          <h1 className="text-danger">Recipe Not Found</h1>
-        </div>
-      </div>
-    </div>
-  )
+const Meal = ({meal}) => {
+  const history = useHistory()
+
+  const toDetail = (id) => {
+    history.push(`/recipe/${id}`)
+  }
 
   return (
-    <Container>
-      <Row>
-        {
-          meals && meals.map((meal, i) => {
-            return (
-              <Col key={meal.idMeal} className="p-2">
-                <Card style={{ width: '10rem' }} className="border-0">
-                  <Card.Img variant="top" src={meal.strMealThumb + '/preview'} />
-                  <Card.Body>
-                    <Card.Title>{meal.strMeal}</Card.Title>
-                    <Button variant="danger" size="sm">See Details</Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            )
-          })
-        }
-      </Row>
-    </Container>
+    <Col className="p-2 m-2">
+      <Card style={{ width: '10rem' }} className="border-0">
+        <Card.Img variant="top" src={meal.strMealThumb + '/preview'} />
+        <Card.Body className="p-2 mb-2 pt-2">
+          <Card.Title>{meal.strMeal}</Card.Title>
+          <div className="justify-content-between">
+            <Button variant="danger" size="sm" className="mr-2" onClick={() => toDetail(meal.idMeal)}>See Details</Button>
+            <Button variant="outline-danger" size="sm"><i className="far fa-heart"></i></Button>
+          </div>
+        </Card.Body>
+      </Card>
+    </Col>
   )
 }
 
-export default MealList;
+export default Meal;
