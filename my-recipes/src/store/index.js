@@ -1,28 +1,19 @@
-import { createStore } from "redux"
+import { 
+  createStore, 
+  applyMiddleware,
+  combineReducers
+} from "redux"
+import thunk from "redux-thunk"
+import mealReducer from "./reducers/mealReducer"
+import detailReducer from "./reducers/detailReducer"
+import favoriteReducer from "./reducers/favoriteReducer"
 
-const initialState = {
-  favorites: [],
-  searchQuery: ""
-}
-const reducer = (state=initialState, action) => {
-  switch(action.type) {
-    case "ADD_FAV": 
-      let fave = {
-        ...state, favorites: state.favorites.concat(action.meal)
-      }
-      console.log(fave, '====fave di store');
-      return fave
-    case "SET_SEARCH": 
-      let search = {
-        ...state, searchQuery: action.payload
-      }
-      console.log(search, '====search di store search');
-      return search
-    default:
-      return state
-  }
-}
+const reducers = combineReducers({
+  mealReducer,
+  detailReducer,
+  favoriteReducer
+})
 
-const store = createStore(reducer)
+const store = createStore(reducers, applyMiddleware(thunk))
 
 export default store

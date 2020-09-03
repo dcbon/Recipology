@@ -1,15 +1,17 @@
-import React from "react"
+import React, { useState } from "react"
 import { 
   Col, 
   Card, 
   Button 
 } from 'react-bootstrap'
 import { useHistory } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
+import { setFaves } from "../store/actions/favoriteAction"
+import swal from 'sweetalert'
 
 
 const Meal = ({meal}) => {
-  // const faves = useSelector( state => state.favorites)
+  const [faved, setFaved] = useState()
   const history = useHistory()
   const dispatch = useDispatch()
 
@@ -18,10 +20,9 @@ const Meal = ({meal}) => {
   }
 
   const favorited = (meal) => {
-    dispatch({
-      type: "ADD_FAV",
-      meal: meal
-    })
+    dispatch(setFaves(meal))
+    swal("Success!", "Added to Favorites!", "success");
+    setFaved(true)
   }
 
   return (
@@ -32,7 +33,7 @@ const Meal = ({meal}) => {
           <Card.Title>{meal.strMeal}</Card.Title>
           <div className="justify-content-between">
             <Button variant="danger" size="sm" className="mr-2" onClick={() => toDetail(meal.idMeal)}>See Details</Button>
-            <Button variant="outline-danger" size="sm" onClick={() => favorited(meal)}><i className="far fa-heart"></i></Button>
+            {!faved && <Button variant="outline-danger" size="sm" onClick={() => favorited(meal)}><i className="far fa-heart"></i></Button>}
           </div>
         </Card.Body>
       </Card>

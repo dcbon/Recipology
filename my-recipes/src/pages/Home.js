@@ -1,12 +1,18 @@
-import React from "react"
+import React, { useEffect } from "react"
 import MealList from "../components/MealList"
-import useFetcher from "../hooks/useFetcher"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { getMeals, getLoading } from "../store/actions/mealAction"
 
 const Home = () => {
-  const search = useSelector( state => state.searchQuery)
-  const {data: meals, loading, error} = useFetcher (`https://www.themealdb.com/api/json/v1/1/search.php?s=${search || ""}`)
-
+  const dispatch = useDispatch()
+  const { meals, loading, error } = useSelector((state) => state.mealReducer)
+  
+  useEffect(() => {
+    dispatch(getLoading(true))
+    dispatch(getMeals())
+    dispatch(getLoading(false))
+  }, [dispatch])
+  
   if(loading) return (
     <div className="container-sm">
       <div className="container justify-content-center text-center">

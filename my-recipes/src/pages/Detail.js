@@ -1,26 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import useFetcher from "../hooks/useFetcher"
 import { useSelector, useDispatch } from "react-redux"
+import { getDetail, getLoading } from "../store/actions/detailAction"
+import { setFaves } from "../store/actions/favoriteAction"
+import swal from 'sweetalert'
 
 const Detail = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { id } = useParams()
+  const { meal, loading, error } = useSelector((state) => state.detailReducer)
   // const [ingredients, setIngredients] = useState([])
-  
+  // console.log(meal);
+  useEffect(() => {
+    dispatch(getLoading(true))
+    dispatch(getDetail(id))
+    dispatch(getLoading(false))
+  }, [dispatch, id])
+
   const toHome = () => {
     history.push(`/`)
   }
 
   const favorited = (meal) => {
-    dispatch({
-      type: "ADD_FAV",
-      meal: meal
-    })
+    dispatch(setFaves(meal))
+    swal("Success!", "Added to Favorites!", "success");
   }
 
-  const {data, loading, error} = useFetcher (`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+  // const {data, loading, error} = useFetcher (`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
 
   // const getIngredients = () => {
   //   let newData = JSON.stringify(data)
@@ -51,31 +58,42 @@ const Detail = () => {
     </div>
   )
 
+  if(error) return (
+    <div className="container justify-content-center mb-5">
+      <div className="row justify-content-center">
+        <div className="col">
+          <img src="https://image.freepik.com/free-vector/error-404-concept-illustration_114360-1811.jpg" alt="not found" />
+          <h1 className="text-danger">Recipe Not Found</h1>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <div className="container-sm justify-content-center text-dark">
       {
-        data && data.map((data, idx) => {
+        meal && meal.map((item, idx) => {
           return (
-            <div key={data.idMeal}>
+            <div key={item.idMeal}>
               <div className="my-5">
-                <h1 className="text-center">{data.strMeal}</h1>
+                <h1 className="text-center">{item.strMeal}</h1>
                 <hr />
               </div>
               <div className="row justify-content-center">
                 <div className="col-4">
-                  <img src={data.strMealThumb} alt="" className="img-fluid" />
+                  <img src={item.strMealThumb} alt="" className="img-fluid" />
                   <h4 className="text-center my-3">Info</h4>
                   <hr />
                   <div className="">
-                    <p><span className="mr-2 far fa-utensils"></span>{data.strCategory}</p>
-                    <p><span className="mr-2 far fa-globe"></span>{data.strArea}</p>
-                    <p><span className="mr-2 far fa-hashtag"></span>{ data.strTags ? data.strTags.replace(",", ", ") : "No tags" }</p>
+                    <p><span className="mr-2 far fa-utensils"></span>{item.strCategory}</p>
+                    <p><span className="mr-2 far fa-globe"></span>{item.strArea}</p>
+                    <p><span className="mr-2 far fa-hashtag"></span>{ item.strTags ? item.strTags.replace(",", ", ") : "No tags" }</p>
                   </div>
                 </div>
                 <div className="col-6 text-justify">
-                  <p className="" style={{whiteSpace: 'pre-wrap'}}>{data.strInstructions}</p>
+                  <p className="" style={{whiteSpace: 'pre-wrap'}}>{item.strInstructions}</p>
                   <div className="justify-content-between text-right mt-3">
-                    <div className="btn btn-outline-danger mr-2" onClick={() => favorited(data)}><i className="far fa-heart"></i></div>
+                    <div className="btn btn-outline-danger mr-2" onClick={() => favorited(meal)}><i className="far fa-heart"></i></div>
                     <div className="btn btn-danger px-5" onClick={toHome}>Back</div>
                   </div>
                 </div>
@@ -104,13 +122,12 @@ const Detail = () => {
                 <hr />
               </div>
               <iframe width="420" height="315"
-                src={data.strYoutube.replace("watch?v=", "embed/")}>
+                src={item.strYoutube.replace("watch?v=", "embed/")}>
               </iframe>
             </div>
           )
         })
       }
-    {console.log(data)}
     </div>
   )
 }

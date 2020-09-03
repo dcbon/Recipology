@@ -10,11 +10,26 @@ import {
 
 const Favorite = () => {
   const history = useHistory()
-  const faves = useSelector((state) => state.favorites);
+  const { favorites, loading } = useSelector((state) => state.favoriteReducer)
 
   const toDetail = (id) => {
     history.push(`/recipe/${id}`)
   }
+  
+  if(loading) return (
+    <div className="container-sm">
+      <div className="container justify-content-center text-center">
+        <div className="row justify-content-center mt-5">
+          <div className="col">
+            <div className="spinner-border text-danger" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+        <h1 className="text-danger">Please Wait..</h1>
+      </div>
+    </div>
+  )
   
   return (
     <div className="container-sm justify-content-center text-dark">
@@ -24,7 +39,7 @@ const Favorite = () => {
       </div>
       <div className="row justify-content-center">
       {
-        faves && faves.map((fave, idx) => {
+        favorites && favorites.map((fave, idx) => {
           return (
             <Col className="p-2 m-2 text-center" key={fave.idMeal}>
               <Card style={{ width: '10rem' }} className="border-0">
@@ -41,7 +56,6 @@ const Favorite = () => {
         })
       }
       </div>
-      {console.log(faves)}
     </div>
   )
 }
