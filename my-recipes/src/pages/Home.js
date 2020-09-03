@@ -1,9 +1,11 @@
 import React from "react"
 import MealList from "../components/MealList"
 import useFetcher from "../hooks/useFetcher"
+import { useSelector } from "react-redux"
 
 const Home = () => {
-  const {data: meals, loading, error} = useFetcher (`https://www.themealdb.com/api/json/v1/1/search.php?s=`)
+  const search = useSelector( state => state.searchQuery)
+  const {data: meals, loading, error} = useFetcher (`https://www.themealdb.com/api/json/v1/1/search.php?s=${search || ""}`)
 
   if(loading) return (
     <div className="container-sm">
