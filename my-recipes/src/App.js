@@ -27,7 +27,7 @@ function App() {
       <Router>
         <div className="App container-sm">
           <Navbar expand="md" variant="light" bg="light" className="sticky-top mt-4">
-            <Container>
+            <Container className="justify-content-between">
               <Navbar.Brand href="#" to="/" className=""><b>RECIPOLOGY</b></Navbar.Brand>
               <Nav className="mr-auto">
                 <Link className="nav-link text-dark" to="/">Home</Link>

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux"
 import { getDetail, getLoading } from "../store/actions/detailAction"
 import { setFaves } from "../store/actions/favoriteAction"
+import { setSearch } from "../store/actions/mealAction"
 import swal from 'sweetalert'
 
 const Detail = () => {
@@ -10,38 +11,55 @@ const Detail = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
   const { meal, loading, error } = useSelector((state) => state.detailReducer)
-  // const [ingredients, setIngredients] = useState([])
-  // console.log(meal);
+  const [ingredients, setIngredients] = useState()
+
   useEffect(() => {
     dispatch(getLoading(true))
-    dispatch(getDetail(id))
-    dispatch(getLoading(false))
+    const fetchDetail = async () => {
+      try {
+        dispatch(getDetail(id))
+      }
+      catch(err) {
+        console.log(err);
+      }
+      finally {
+        dispatch(getLoading(false))
+      }
+    }
+    fetchDetail()
   }, [dispatch, id])
+
+  useEffect(() => {
+    // console.log(meal[0], 'ini meal');
+    const getIngredients = async () => {
+      try {
+        let ingreTemp = []
+        for (let i = 1; i <= 20; i++) {
+          let temp = []
+          temp.push(meal[0][`strIngredient${i}`])
+          temp.push(meal[0][`strMeasure${i}`])
+          ingreTemp.push(temp)
+          // console.log(temp, '===temp');
+        }
+        setIngredients(ingreTemp)
+        // console.log(ingreTemp, '===ing');
+      }
+      catch(err) {
+        console.log(err);
+      }
+    }
+    getIngredients()
+  }, [meal])
 
   const toHome = () => {
     history.push(`/`)
+    dispatch(setSearch(""))
   }
 
   const favorited = (meal) => {
     dispatch(setFaves(meal))
     swal("Success!", "Added to Favorites!", "success");
   }
-
-  // const {data, loading, error} = useFetcher (`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
-
-  // const getIngredients = () => {
-  //   let newData = JSON.stringify(data)
-  //   console.log(data, '===new');
-  //   let ingreTemp = []
-  //   for (let i = 1; i <= 20; i++) {
-  //     let temp = []
-  //     // temp.push(newData[`strIngredient${i}`])
-  //     // temp.push(newData[`strMeasure${i}`])
-  //     // ingredients.push(temp)
-  //   }
-  //   setIngredients(ingreTemp)
-  //   console.log(ingreTemp, '====ing');
-  // }
   
   if(loading) return (
     <div className="container-sm">
@@ -102,23 +120,23 @@ const Detail = () => {
                 <h1 className="text-center">Ingredients</h1>
                 <hr />
               </div>
-              {/* <div className="row">
+              <div className="row container-sm">
                 {
-                  ingredients && ingredients.map ((ing, i) => {
+                  ingredients && ingredients.map((ing, i) => {
                     return (
                       <div className="col m-2 p-2" key={i}>
                         <div className="card border-0" style={{width: '10rem'}}>
-                          <img src={`https://www.themealdb.com/images/ingredients/${ing[0]}-Small.png`} className="card-img-top" alt="..."/>
-                          <h5 className="card-title">{ing[0]}</h5>
-                          <p className="card-text">{ing[1]}</p>
+                          {ing[0] && <img src={`https://www.themealdb.com/images/ingredients/${ing[0]}-Small.png`} className="card-img-top" alt="..."/>}
+                          {ing[0] && <h5 className="card-title">{ing[0]}</h5>}
+                          {ing[1] && <p className="card-text">{ing[1]}</p>}
                         </div>
                       </div>
                     )
                   })
                 }
-              </div> */}
+              </div>
               <div className="my-5">
-                <h1 className="text-center">Video(s)</h1>
+                <h1 className="text-center">Video</h1>
                 <hr />
               </div>
               <iframe width="420" height="315"

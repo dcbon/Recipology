@@ -5,13 +5,13 @@ import { getMeals, getLoading } from "../store/actions/mealAction"
 
 const Home = () => {
   const dispatch = useDispatch()
-  const { meals, loading, error } = useSelector((state) => state.mealReducer)
+  const { meals, loading, error, search } = useSelector((state) => state.mealReducer)
   
   useEffect(() => {
     dispatch(getLoading(true))
-    dispatch(getMeals())
+    dispatch(getMeals(search))
     dispatch(getLoading(false))
-  }, [dispatch])
+  }, [search, dispatch])
   
   if(loading) return (
     <div className="container-sm">
@@ -44,7 +44,7 @@ const Home = () => {
           className="py-5 my-5 text-dark"
         >
           <h2 className="" style={{letterSpacing: "2px"}}>WELCOME TO RECIPOLOGY</h2>
-          <p className="pt-3 ms">Here we try to share our vision about food quality, our mission about customer’s <span><br></br></span> satisfaction and introducing services that we provide for you.</p>
+          <p className="pt-3 ms">Here we try to share our vision about food quality <span><br></br></span> and giving out our best recipes that certainly unforgetable.</p>
           <button className="btn btn-danger">See Category</button>
         </div>
         <MealList 
