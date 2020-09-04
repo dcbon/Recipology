@@ -10,8 +10,10 @@ const Detail = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { id } = useParams()
+  const { favorites } = useSelector((state) => state.favoriteReducer)
   const { meal, loading, error } = useSelector((state) => state.detailReducer)
   const [ingredients, setIngredients] = useState()
+  const [faved, setFaved] = useState(false)
 
   useEffect(() => {
     dispatch(getLoading(true))
@@ -30,7 +32,6 @@ const Detail = () => {
   }, [dispatch, id])
 
   useEffect(() => {
-    // console.log(meal[0], 'ini meal');
     const getIngredients = async () => {
       try {
         let ingreTemp = []
@@ -39,10 +40,8 @@ const Detail = () => {
           temp.push(meal[0][`strIngredient${i}`])
           temp.push(meal[0][`strMeasure${i}`])
           ingreTemp.push(temp)
-          // console.log(temp, '===temp');
         }
         setIngredients(ingreTemp)
-        // console.log(ingreTemp, '===ing');
       }
       catch(err) {
         console.log(err);
@@ -51,14 +50,24 @@ const Detail = () => {
     getIngredients()
   }, [meal])
 
+  useEffect(() => {
+    checkFav()
+  }, [meal])
+
   const toHome = () => {
     history.push(`/`)
     dispatch(setSearch(""))
   }
 
+  const checkFav = () => {
+    let isFavorited = favorites.includes(meal)
+    if (isFavorited) setFaved(true)
+  }
+
   const favorited = (meal) => {
     dispatch(setFaves(meal))
     swal("Success!", "Added to Favorites!", "success");
+    setFaved(true)
   }
   
   if(loading) return (
@@ -111,7 +120,7 @@ const Detail = () => {
                 <div className="col-6 text-justify">
                   <p className="" style={{whiteSpace: 'pre-wrap'}}>{item.strInstructions}</p>
                   <div className="justify-content-between text-right mt-3">
-                    <div className="btn btn-outline-danger mr-2" onClick={() => favorited(meal)}><i className="far fa-heart"></i></div>
+                    {!faved && <div className="btn btn-outline-danger mr-2" onClick={() => favorited(meal)}><i className="far fa-heart"></i></div>}
                     <div className="btn btn-danger px-5" onClick={toHome}>Back</div>
                   </div>
                 </div>

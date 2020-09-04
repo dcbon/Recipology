@@ -2,9 +2,11 @@ import React, { useEffect } from "react"
 import MealList from "../components/MealList"
 import { useSelector, useDispatch } from "react-redux"
 import { getMeals, getLoading } from "../store/actions/mealAction"
+import { useHistory } from "react-router-dom"
 
 const Home = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const { meals, loading, error, search } = useSelector((state) => state.mealReducer)
   
   useEffect(() => {
@@ -12,6 +14,10 @@ const Home = () => {
     dispatch(getMeals(search))
     dispatch(getLoading(false))
   }, [search, dispatch])
+
+  const toCategory = () => {
+    history.push(`/categories`)
+  }
   
   if(loading) return (
     <div className="container-sm">
@@ -45,7 +51,7 @@ const Home = () => {
         >
           <h2 className="" style={{letterSpacing: "2px"}}>WELCOME TO RECIPOLOGY</h2>
           <p className="pt-3 ms">Here we try to share our vision about food quality <span><br></br></span> and giving out our best recipes that certainly unforgetable.</p>
-          <button className="btn btn-danger">See Category</button>
+          <button className="btn btn-danger" onClick={toCategory}>See Category</button>
         </div>
         <MealList 
           meals={meals}

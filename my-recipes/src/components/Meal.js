@@ -1,19 +1,29 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { 
   Col, 
   Card, 
   Button 
 } from 'react-bootstrap'
 import { useHistory } from "react-router-dom"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setFaves } from "../store/actions/favoriteAction"
 import swal from 'sweetalert'
 
 
 const Meal = ({meal}) => {
+  const { favorites } = useSelector((state) => state.favoriteReducer)
   const [faved, setFaved] = useState()
   const history = useHistory()
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    checkFav()
+  })
+
+  const checkFav = () => {
+    let isFavorited = favorites.includes(meal)
+    if (isFavorited) setFaved(true)
+  }
 
   const toDetail = (id) => {
     history.push(`/recipe/${id}`)

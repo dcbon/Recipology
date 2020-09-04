@@ -12,8 +12,18 @@ const Category = () => {
   
   useEffect(() => {
     dispatch(getLoading(true))
-    dispatch(getCategories())
-    dispatch(getLoading(false))
+    const fetchCategory = async () => {
+      try {
+        dispatch(getCategories())
+      }
+      catch(err) {
+        console.log(err);
+      }
+      finally {
+        dispatch(getLoading(false))
+      }
+    }
+    fetchCategory()
   }, [])
 
   const getCategoryMeal = (query) => {
@@ -43,12 +53,17 @@ const Category = () => {
         <h1 className="text-center">Categories</h1>
         <hr />
       </div>
-      <div className="row justify-content-center">
+      <div className="row d-flex justify-content-start">
       {
         categories && categories.map((item, idx) => {
           return (
             <Col className="p-2 m-2 text-center" key={item.idCategory}>
-              <Card style={{ width: '10rem' }} className="border-0">
+              <Card 
+                role="button"
+                style={{ width: '10rem' }} 
+                className="border-0" 
+                onClick={() => getCategoryMeal(item.strCategory)}
+              >
                 <Card.Img variant="top" src={item.strCategoryThumb} />
                 <Card.Title className="p-2 mb-2 pt-2">{item.strCategory}</Card.Title>
               </Card>
@@ -59,10 +74,10 @@ const Category = () => {
       </div>
       <div className="container-sm justify-content-center text-dark">
         <div className="my-5">
-          <h1 className="text-center">Meals</h1>
+          <h1 className="text-center">Filtered Meals</h1>
           <hr />
         </div>
-        <div className="row justify-content-center">
+        <div className="row  d-flex justify-content-start">
         {
           category && category.map((item, idx) => {
             return (
