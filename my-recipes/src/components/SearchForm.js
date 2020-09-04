@@ -25,6 +25,7 @@ const SearchForm = () => {
     <>
       <div className="row">
         <DebounceInput
+          data-testid="search-input"
           className="form-control mr-sm-2 d-inline col-8"
           placeholder="Search for a Recipe" 
           minLength={1}
@@ -32,7 +33,13 @@ const SearchForm = () => {
           onChange={onChange} 
           value={input} 
         />
-        <Button onClick={onSearch} className="d-inline col-3" variant="danger" type="submit">Search</Button>
+        <Button 
+          data-testid="search-button"
+          onClick={onSearch} 
+          className="d-inline col-3" 
+          variant="danger" 
+          type="submit"
+        >Search</Button>
       </div>
     </>
   )
