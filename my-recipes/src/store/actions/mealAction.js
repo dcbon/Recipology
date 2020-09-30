@@ -79,7 +79,6 @@ export function filterCategory(query) {
     try {
       const res = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${query}`)
       const data = await res.json()
-      console.log(data, '===filter action');
       dispatch({
         type: "SET_CATEGORY",
         payload: data.meals
