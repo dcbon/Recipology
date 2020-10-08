@@ -30,6 +30,22 @@ const Favorite = () => {
       </div>
     </div>
   )
+
+  if (!favorites.length) return (
+    <div className="container-sm justify-content-center text-center">
+      <div className="my-5">
+        <h1 className="text-center">Favorites</h1>
+        <hr />
+      </div>
+      <div className="row justify-content-center mt-5">
+        <div className="col">
+          <img src="empty.svg" style={{width: 300}} alt="empty" />
+        </div>
+      </div>
+      <h4 className="text-org mt-5">Your Favorite List is empty</h4>
+      <h5>Click <span role="img" aria-label="heart">&#x1F497;</span> at the bottom of the card to add to favorite</h5>
+    </div>
+  )
   
   return (
     <div className="container-sm justify-content-center text-dark">
@@ -37,24 +53,24 @@ const Favorite = () => {
         <h1 className="text-center">Favorites</h1>
         <hr />
       </div>
-      <div className="row justify-content-center">
-      {
-        favorites && favorites.map((fave, idx) => {
-          return (
-            <Col className="p-2 m-2 text-center" key={fave.idMeal}>
-              <Card style={{ width: '10rem' }} className="border-0">
-                <Card.Img variant="top" src={fave.strMealThumb + '/preview'} />
-                <Card.Body className="p-2 mb-2 pt-2">
-                  <Card.Title>{fave.strMeal}</Card.Title>
-                  <div className="justify-content-between">
-                    <Button variant="danger" size="sm" className="mr-2" onClick={() => toDetail(fave.idMeal)}>See Details</Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          )
-        })
-      }
+      <div className="row justify-content-start">
+        {
+          favorites && favorites.map((fave) => {
+            return (
+              <Col md={2} xs={4} className="p-2 text-center" key={fave.idMeal}>
+                <Card className="border-0">
+                  <Card.Img variant="top" src={fave.strMealThumb + '/preview'} />
+                  <Card.Body className="p-2 mb-2 pt-2">
+                    <Card.Title>{fave.strMeal}</Card.Title>
+                    <div className="justify-content-between">
+                      <Button variant="danger" size="sm" className="mr-2" onClick={() => toDetail(fave.idMeal)}>See Details</Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            )
+          })
+        }
       </div>
     </div>
   )

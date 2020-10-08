@@ -148,7 +148,7 @@ const Detail = () => {
                 <h1 className="text-center">Video</h1>
                 <hr />
               </div>
-              <iframe width="420" height="315"
+              <iframe width="420" height="315" title={item.strMeal}
                 src={item.strYoutube.replace("watch?v=", "embed/")}>
               </iframe>
             </div>

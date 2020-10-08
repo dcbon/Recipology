@@ -1,13 +1,21 @@
-import React, { useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import MealList from "../components/MealList"
 import { useSelector, useDispatch } from "react-redux"
 import { getMeals, getLoading } from "../store/actions/mealAction"
 import { useHistory } from "react-router-dom"
+import { DebounceInput } from "react-debounce-input";
+import { setSearch } from "../store/actions/mealAction"
 
 const Home = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { meals, loading, error, search } = useSelector((state) => state.mealReducer)
+  const [input, setInput] = useState("")
+
+  const onChange = (evt) => {
+    setInput(evt.target.value)
+    dispatch(setSearch(input))
+  }
   
   useEffect(() => {
     dispatch(getLoading(true))
@@ -49,9 +57,22 @@ const Home = () => {
           }} 
           className="py-5 my-5 text-dark"
         >
-          <h2 className="" style={{letterSpacing: "2px"}}>WELCOME TO RECIPOLOGY</h2>
+          <h2 className="" style={{letterSpacing: "2px"}}>WELCOME TO <span className="text-danger">RECIPOLOGY</span></h2>
           <p className="pt-3 ms">Here we try to share our vision about food quality <span><br></br></span> and giving out our best recipes that certainly unforgetable.</p>
           <button className="btn btn-danger" onClick={toCategory}>See Category</button>
+        </div>
+        <div className="my-5 row justify-content-center">
+          <div className="col-lg-6">
+            <DebounceInput
+              data-testid="search-input"
+              className="form-control mr-2"
+              placeholder="Search for a Recipe" 
+              minLength={1}
+              debounceTimeout={200}
+              onChange={onChange} 
+              value={input} 
+            />
+          </div>
         </div>
         <MealList 
           meals={meals}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { 
   Col, 
   Card
@@ -9,9 +9,12 @@ import { getCategories, getLoading, filterCategory } from "../store/actions/meal
 const Category = () => {
   const dispatch = useDispatch()
   const { categories, loading, error, category } = useSelector((state) => state.mealReducer)
+  const [categoryName, setCategoryName] = useState('')
   
   useEffect(() => {
     dispatch(getLoading(true))
+    setCategoryName('Beef')
+    getCategoryMeal('Beef')
     const fetchCategory = async () => {
       try {
         dispatch(getCategories())
@@ -27,6 +30,7 @@ const Category = () => {
   }, [])
 
   const getCategoryMeal = (query) => {
+    setCategoryName(query)
     dispatch(filterCategory(query))
   }
   
@@ -53,14 +57,14 @@ const Category = () => {
         <h1 className="text-center">Categories</h1>
         <hr />
       </div>
-      <div className="row d-flex justify-content-start">
+      <div className="row justify-content-start">
       {
         categories && categories.map((item, idx) => {
           return (
-            <Col className="p-2 m-2 text-center" key={item.idCategory}>
+            <Col md={2} xs={4} className="p-2 text-center" key={item.idCategory}>
               <Card 
                 role="button"
-                style={{ width: '10rem' }} 
+                // style={{ width: '10rem' }} 
                 className="border-0" 
                 onClick={() => getCategoryMeal(item.strCategory)}
               >
@@ -74,15 +78,15 @@ const Category = () => {
       </div>
       <div className="container-sm justify-content-center text-dark">
         <div className="my-5">
-          <h1 className="text-center">Filtered Meals</h1>
+    <h1 className="text-center">{categoryName}</h1>
           <hr />
         </div>
-        <div className="row  d-flex justify-content-start">
+        <div className="row justify-content-start">
         {
-          category && category.map((item, idx) => {
+          category && category.map((item) => {
             return (
-              <Col className="p-2 m-2 text-center" key={item.idMeal}>
-                <Card style={{ width: '10rem' }} className="border-0" >
+              <Col md={2} xs={4} className="p-2 text-center" key={item.idMeal}>
+                <Card className="border-0" >
                   <Card.Img variant="top" src={item.strMealThumb + '/preview'} />
                   <Card.Title className="p-2 mb-2 pt-2">{item.strMeal}</Card.Title>
                 </Card>
